@@ -8,31 +8,37 @@ The script is built using Python3 and has a the following requirements
 *    `python3`
 *    `python3-dbus` (or equivalent)
 
-python-dbus must be the Python3 version. The package with the correct version is listed as python-dbus in the Arch repositories and python3-dbus in the Debian and Fedora repositories
+The package with the correct version is listed as python-dbus in the Arch repositories and python3-dbus in the Debian and Fedora repositories
 
 This was also written and tested to be working on GNOME 3.16 with gnome-shell installed. I'm unsure if it will work on other versions of GNOME (although I don't see why it shouldn't) so your mileage may vary.
 
 How to Use
 ------------------
 Just download the script and make sure it is executable with 
-    `chmod +x volume-change.py`
+   ```chmod +x volume-change.py```
 The script takes in two arguments:
 [string arg1] increase or decrease
 [int arg2] percentage change
 
 an example for running this script might look like 
+
     python3 volume-change.py increase 2
+
 This would increase the volume by 2 percent
 
 You can then create a custom keyboard shortcut setting the command to either of these commands
-    `python3 [SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]`
-    `./[SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]`
+
+    python3 [SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]
+    ./[SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]
 
 Because this script will run every time you press the volume up or down keys, you may want to run a compiled version. You can compile the script with basic optimizations with
-    `python3 -O -m py_compile volume-change.py`
-and then your command would be
-    `python3 [SCRIPT_DIRECTORY]/__pycache__/volume-change.cpython-[PYTHON__VERSION].pyo [arg1] [arg2]`
+    
+    python3 -O -m py_compile volume-change.py
 
+and then your command would be
+```
+    python3 [SCRIPT_DIRECTORY]/__pycache__/volume-change.cpython-[PYTHON__VERSION].pyo [arg1] [arg2]
+```
 Motivation and Explanation
 --------------------------
 The motivation behind this is that each time you change the volume in GNOME, the volume changes by a set percentage (6% in GNOME 3.16). That percentage is literally hardcoded into the C code of the gnome-settings-daemon and is therefore not configurable. For me, 6% was too much of a step, and I would continue to bounce back and forward between too loud and too quiet of a volume. 
