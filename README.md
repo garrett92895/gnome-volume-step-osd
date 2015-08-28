@@ -5,8 +5,8 @@ A workaround script that allows you to change the system volume by a desired ste
 Requirements
 ------------
 The script is built using Python3 and has a the following requirements
-*    python3
-*    python3-dbus (or equivalent)
+*    `python3`
+*    `python3-dbus` (or equivalent)
 
 python-dbus must be the Python3 version. The package with the correct version is listed as python-dbus in the Arch repositories and python3-dbus in the Debian and Fedora repositories
 
@@ -15,7 +15,7 @@ This was also written and tested to be working on GNOME 3.16 with gnome-shell in
 How to Use
 ------------------
 Just download the script and make sure it is executable with 
-    chmod +x volume-change.py
+    `chmod +x volume-change.py`
 The script takes in two arguments:
 [string arg1] increase or decrease
 [int arg2] percentage change
@@ -25,13 +25,13 @@ an example for running this script might look like
 This would increase the volume by 2 percent
 
 You can then create a custom keyboard shortcut setting the command to either of these commands
-    python3 [SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]
-    ./[SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]
+    `python3 [SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]`
+    `./[SCRIPT_DIRECTORY]/volume-change.py [arg1] [arg2]`
 
 Because this script will run every time you press the volume up or down keys, you may want to run a compiled version. You can compile the script with basic optimizations with
-    python3 -O -m py_compile volume-change.py
+    `python3 -O -m py_compile volume-change.py`
 and then your command would be
-    python3 [SCRIPT_DIRECTORY]/__pycache__/volume-change.cpython-[PYTHON__VERSION].pyo [arg1] [arg2]
+    `python3 [SCRIPT_DIRECTORY]/__pycache__/volume-change.cpython-[PYTHON__VERSION].pyo [arg1] [arg2]`
 
 Motivation and Explanation
 --------------------------
