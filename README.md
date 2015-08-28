@@ -37,7 +37,7 @@ Because this script will run every time you press the volume up or down keys, yo
 
 and then your command would be
 
-    python3 [SCRIPT_DIRECTORY]/__pycache__/volume-change.cpython-[PYTHON__VERSION].pyo [arg1] [arg2]
+    python3 [SCRIPT_DIRECTORY]/__pycache__/volume-change.cpython-[PYTHON_VERSION].pyo [arg1] [arg2]
 
 Motivation and Explanation
 --------------------------
