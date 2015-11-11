@@ -33,12 +33,17 @@ else:
 command += ' | grep -oP "\[\d*%\]" | head -n 1 | sed s:[][%]::g'
 
 current_vol_percentage = int(getoutput(command))
+# If it's 0 then add mute flag (tigger sub-action, keyboard ligth for example)
+if current_vol_percentage == 0:
+	getoutput('amixer -D pulse set Master mute');
 
 # Determining which logo to use based off of the percentage
 logo = 'audio-volume-'
-if current_vol_percentage < 20:
+if current_vol_percentage == 0:
+	logo += 'muted'
+elif current_vol_percentage < 30:
     logo += 'low'
-elif current_vol_percentage >= 20 and current_vol_percentage < 80:
+elif current_vol_percentage < 70:
     logo += 'medium'
 else:
     logo += 'high'
