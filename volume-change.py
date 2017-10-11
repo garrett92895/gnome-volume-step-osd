@@ -2,7 +2,7 @@
 # By: Garrett Holbrook
 # Date: August 27th, 2015
 #
-# Usage: Changes the system volume through amixer and then 
+# Usage: Changes the system volume through amixer and then
 #        makes a dbus method call to the gnome shell to get the
 #        gnome volume OSD (On Screen Display)
 #
@@ -10,7 +10,7 @@
 #           (on Debian) or equivalent
 import dbus
 import sys
-from subprocess import getoutput
+from subprocess import getoutput, call
 
 # Getting the dbus interface to communicate with gnome's OSD
 session_bus = dbus.SessionBus()
@@ -21,34 +21,46 @@ interface = dbus.Interface(proxy, 'org.gnome.Shell')
 # then creating a bash command that will reduce the stdout to the
 # new percentage volume. Vol = volume
 vol_action = sys.argv[1]
-vol_percent_change = sys.argv[2]
+vol_percent_change = int(sys.argv[2])
 
-command = 'amixer -D pulse sset Master ' + vol_percent_change + '%'
+# Get the volumes for all the channels
+comm_get_volume='amixer get Master | grep -oP "\[\d*%\]" | sed s:[][%]::g'
+vol_percentages=list(map(int, getoutput(comm_get_volume).split()))
 
-if vol_action == 'increase':
-    command += '+ > /dev/null && amixer -D pulse set Master unmute'
+# Average them into a single value (note the +0.5 for rounding errors)
+vol_percentage=int(sum(vol_percentages)/len(vol_percentages)+0.5)
+
+# Add/subtract the value of volume (handle negative values)
+increase = (vol_action == 'increase')
+if (increase):
+    vol_percentage=max(0, (vol_percentage + vol_percent_change))
 else:
-    command += '-'
+    vol_percentage=max(0, (vol_percentage - vol_percent_change))
 
-command += ' | grep -oP "\[\d*%\]" | head -n 1 | sed s:[][%]::g'
+# Set the volume for both channels
+command = 'amixer -D pulse sset Master ' + str(vol_percentage) + '% > /dev/null'
 
-current_vol_percentage = int(getoutput(command))
-# If it's 0 then add mute flag (tigger sub-action, keyboard ligth for example)
-if current_vol_percentage == 0:
-	getoutput('amixer -D pulse set Master mute');
+if (increase):
+    command += ' && amixer -D pulse set Master unmute > /dev/null'
+
+# Apply volume
+call(command, shell=True)
+
+# If it's 0 then add mute flag (trigger sub-action, keyboard light for example)
+if vol_percentage == 0:
+	call('amixer -D pulse set Master mute', shell=True);
 
 # Determining which logo to use based off of the percentage
 logo = 'audio-volume-'
-if current_vol_percentage == 0:
+if vol_percentage == 0:
 	logo += 'muted'
-elif current_vol_percentage < 30:
+elif vol_percentage < 30:
     logo += 'low'
-elif current_vol_percentage < 70:
+elif vol_percentage < 70:
     logo += 'medium'
 else:
     logo += 'high'
 logo += '-symbolic'
 
 # Make the dbus method call
-interface.ShowOSD({"icon":logo, "level":current_vol_percentage})
-
+interface.ShowOSD({"icon":logo, "level":vol_percentage})
