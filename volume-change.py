@@ -24,7 +24,7 @@ vol_action = sys.argv[1]
 vol_percent_change = int(sys.argv[2])
 
 # Get the volumes for all the channels
-comm_get_volume='amixer get Master | grep -oP "\[\d*%\]" | sed s:[][%]::g'
+comm_get_volume='amixer -D pulse get Master | grep -oP "\[\d*%\]" | sed s:[][%]::g'
 vol_percentages=list(map(int, getoutput(comm_get_volume).split()))
 
 # Average them into a single value (note the +0.5 for rounding errors)
