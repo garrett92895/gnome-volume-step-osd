@@ -63,4 +63,4 @@ else:
 logo += '-symbolic'
 
 # Make the dbus method call
-interface.ShowOSD({"icon":logo, "level":vol_percentage})
+interface.ShowOSD({"icon":logo, "level":vol_percentage/100})
